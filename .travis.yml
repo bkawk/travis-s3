@@ -6,12 +6,14 @@ dist: trusty
 sudo: required
 addons:
   chrome: stable
+  firefox: latest
 cache:
   directories:
     - node_modules
 install:
   - npm install
 before_script:
+  - export DISPLAY=:99.0
   - npm run lint
 script:
   - xvfb-run npm run test
