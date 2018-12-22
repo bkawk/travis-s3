@@ -1,7 +1,6 @@
 language: node_js
 node_js:
-  - "9"
-  - "8"
+  - "10"
 dist: trusty
 sudo: required
 addons:
@@ -12,9 +11,9 @@ cache:
 install:
   - npm install
 before_script:
+  - export DISPLAY=:99.0
   - npm run lint
-  - npm run build
 script:
   - xvfb-run npm run test
-
+  - xvfb-run npm run test:integration
   
