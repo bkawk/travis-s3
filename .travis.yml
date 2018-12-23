@@ -27,8 +27,6 @@ deploy:
   local_dir: build/es6-bundled
   acl: public_read
   cache_control: "max-age=21600"
-before_deploy:
-  - aws s3 rm s3://eostokens.app --recursive
 after_deploy:
   - aws configure set preview.cloudfront true
   - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
