@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "polymer-cli": "^1.7.1",
+    "travis-ci-cloudfront-invalidation": "^1.1.0",
     "wct-browser-legacy": "^1.0.0"
   },
   "engines": {
