@@ -1,8 +1,6 @@
 language: node_js
 node_js:
   - '10'
-python:
-  - "3.5"
 dist: trusty
 sudo: required
 addons:
@@ -12,22 +10,22 @@ cache:
   directories:
     - node_modules
 install:
+  - npm install -g travis-ci-cloudfront-invalidation
   - npm install
-  - pip install --user awscli
 before_script:
   - npm run lint
 script:
   - xvfb-run npm run test
   - xvfb-run npm run test:integration
 deploy:  
-  - provider: s3  
-    access_key_id: $AWS_ACCESS_KEY_ID
-    secret_access_key: $AWS_SECRET_ACCESS_KEY
-    bucket: eostokens.app
-    skip_cleanup: true
-    local_dir: build/es6-bundled
-    on:    
-      branch: master  
+  on:    
+    branch: master  
+  provider: s3  
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  bucket: eostokens.app
+  skip_cleanup: true
+  local_dir: build/es6-bundled
 after_deploy:
   - aws configure set preview.cloudfront true
-  - test $TRAVIS_BRANCH = "master" && aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+  - travis-ci-cloudfront-invalidation -a $AWS_ACCESS_KEY_ID -s $AWS_SECRET_ACCESS_KEY -c $CLOUDFRONT_DISTRIBUTION_ID -i '/*' -b $TRAVIS_BRANCH -p $TRAVIS_PULL_REQUEST
