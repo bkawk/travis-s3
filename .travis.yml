@@ -16,4 +16,16 @@ before_script:
 script:
   - xvfb-run npm run test
   - xvfb-run npm run test:integration
+deploy:  
+  on:    
+    branch: master  
+  provider: s3  
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  bucket: eostokens.app
+  skip_cleanup: true
+  local_dir: build/es6-bundled
+after_deploy:
+  - aws configure set preview.cloudfront true
+  - aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
   
